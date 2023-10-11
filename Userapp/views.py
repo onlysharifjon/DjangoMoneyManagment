@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from .serializers import Money_monthly_serializer, Money_monthly_serializer_send
 from .models import UserRegistration, MoneyManagment
 
-
+#salomlar
 class Monthly_money(APIView):
     serializer_class = Money_monthly_serializer
     queryset = UserRegistration.objects.all()
