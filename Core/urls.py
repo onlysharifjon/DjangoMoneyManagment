@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from Core import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',include('Userapp.urls')),
 ]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
