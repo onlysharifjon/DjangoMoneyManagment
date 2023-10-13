@@ -16,7 +16,22 @@ class Monthly_money(APIView):
         try:
             user = UserRegistration.objects.get(username=username)
             print(f"User: {user}")
-            money = MoneyManagment.objects.filter(user=user)
+            money = MoneyManagment.objects.all().filter(user=user)
+
+            import datetime
+            now = datetime.datetime.now()
+            now_month = now.month
+            money = money.filter(date__month=now_month)
+
+
+
+
+
+
+
+
+
+
 
             # Handle the money data and return a response
             if money:
