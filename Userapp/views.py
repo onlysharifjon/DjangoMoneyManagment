@@ -6,35 +6,7 @@ from .models import UserRegistration, MoneyManagment
 
 
 # salomlar
-class Monthly_money(APIView):
-    serializer_class = Money_monthly_serializer
-    queryset = UserRegistration.objects.all()
-
-    def post(self, request):
-        username = request.data.get('username')
-        print(f"Serializer: {username}")
-
-        try:
-            user = UserRegistration.objects.get(username=username)
-            print(f"User: {user}")
-            money = MoneyManagment.objects.all().filter(user=user)
-
-            import datetime
-            now = datetime.datetime.now()
-            now_month = now.month
-            money = money.filter(date__month=now_month)
-            # Handle the money data and return a response
-            if money:
-                # Process the money data here
-                # ...
-                serializer_pulcha = Money_monthly_serializer_send(money, many=True)
-                return Response({"message": serializer_pulcha.data})
-            else:
-                return Response({"message": "No money data found for this user"})
-        except UserRegistration.DoesNotExist:
-            return Response({"error": "User not found"}, status=404)
-        except Exception as e:
-            return Response({"error": str(e)}, status=500)
+#
 
 
 class DescriptionMoney(APIView):
@@ -43,10 +15,68 @@ class DescriptionMoney(APIView):
 
     def post(self, request):
         username = request.data.get('username')
+        try:
+            user = UserRegistration.objects.get(username=username)
+            money = MoneyManagment.objects.all().filter(user=user)
+            serializer_pulcha = Money_monthly_serializer_send(money, many=True)
+            hammasi = 0
+            for i in serializer_pulcha.data:
+                hammasi += i['narx']
+            return Response({"Sarflagan pul miqdori umumiy: ": hammasi})
+        except:
+            return Response("Tizimda qandaydir nosozlik")
+
+
+class KirimMoney(APIView):
+    serializer_class = Money_monthly_serializer
+    queryset = UserRegistration.objects.all()
+
+    def post(self, request):
+        username = request.data.get('username')
         user = UserRegistration.objects.get(username=username)
-        money = MoneyManagment.objects.all().filter(user=user)
+        money = MoneyManagment.objects.all().filter(type_payment="Kirim", user=user)
         serializer_pulcha = Money_monthly_serializer_send(money, many=True)
-        hammasi = 0
+        type_payment = 0
         for i in serializer_pulcha.data:
-            hammasi += i['narx']
-        return Response({"Sarflangan pul miqdori umumiy: ": hammasi})
+            type_payment += i['narx']
+        return Response({"Kirim pul miqdori : ": type_payment})
+
+
+class ChiqimMoney(APIView):
+    serializer_class = Money_monthly_serializer
+    queryset = UserRegistration.objects.all()
+
+    def post(self, request):
+        username = request.data.get('username')
+        user = UserRegistration.objects.get(username=username)
+        money = MoneyManagment.objects.all().filter(type_payment="Chiqim", user=user)
+        serializer_pulcha = Money_monthly_serializer_send(money, many=True)
+        total_payment = 1
+        for i in serializer_pulcha.data:
+            total_payment += i['narx']
+        return Response({"Sarflagan pul miqdori : ": total_payment})
+
+
+class KirimChiqimfarqi(APIView):
+    serializer_class = Money_monthly_serializer
+    queryset = UserRegistration.objects.all()
+
+    def post(self, request):
+        username = request.data.get('username')
+        user = UserRegistration.objects.get(username=username)
+        money_chiqim = MoneyManagment.objects.all().filter(type_payment="Chiqim", user=user)
+        serializer_pulcha_chiqim = Money_monthly_serializer_send(money_chiqim, many=True)
+        money_kirim = MoneyManagment.objects.all().filter(type_payment="Kirim", user=user)
+        serializer_pulcha_kirim = Money_monthly_serializer_send(money_kirim, many=True)
+        chqim = 0
+        for g in serializer_pulcha_chiqim.data:
+            chqim += g['narx']
+        kirim = 0
+
+        for i in serializer_pulcha_kirim.data:
+            kirim += i['narx']
+
+        summa = kirim - chqim
+        return Response({"Xarajatlar natijasi : ": summa,
+                         "Kirim": kirim,
+                         "Chiqim:": chqim})
