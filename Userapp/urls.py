@@ -1,5 +1,6 @@
 from django.urls import path
 
+
 from .views import DescriptionMoney,KirimMoney,ChiqimMoney,KirimChiqimfarqi
 
 urlpatterns = [
@@ -7,4 +8,5 @@ urlpatterns = [
     path('kirim/', KirimMoney.as_view()),
     path('chiqim/', ChiqimMoney.as_view()),
     path('farq/',KirimChiqimfarqi.as_view())
-]
+
+
