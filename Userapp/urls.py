@@ -10,3 +10,4 @@ urlpatterns = [
     path('top3/', Top3.as_view()),
     path('topuser/', TopUsers3.as_view()),
 ]
+#biz tugatdik
