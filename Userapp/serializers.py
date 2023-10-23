@@ -18,3 +18,5 @@ class Money_monthly_serializer_send(serializers.ModelSerializer):
     class Meta:
         model = MoneyManagment
         fields = '__all__'
+
+

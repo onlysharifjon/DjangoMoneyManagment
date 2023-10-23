@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import Money_monthly_serializer, Money_monthly_serializer_send
 from .models import UserRegistration, MoneyManagment
-
+from drf_yasg.utils import swagger_auto_schema
 
 # salomlar
 #
@@ -13,6 +13,7 @@ class DescriptionMoney(APIView):
     serializer_class = Money_monthly_serializer
     queryset = UserRegistration.objects.all()
 
+    @swagger_auto_schema(request_body=Money_monthly_serializer)
     def post(self, request):
         username = request.data.get('username')
         try:
@@ -31,6 +32,7 @@ class KirimMoney(APIView):
     serializer_class = Money_monthly_serializer
     queryset = UserRegistration.objects.all()
 
+    @swagger_auto_schema(request_body=Money_monthly_serializer)
     def post(self, request):
         username = request.data.get('username')
         user = UserRegistration.objects.get(username=username)
@@ -46,6 +48,8 @@ class ChiqimMoney(APIView):
     serializer_class = Money_monthly_serializer
     queryset = UserRegistration.objects.all()
 
+    @swagger_auto_schema(request_body=Money_monthly_serializer)
+
     def post(self, request):
         username = request.data.get('username')
         user = UserRegistration.objects.get(username=username)
@@ -60,6 +64,8 @@ class ChiqimMoney(APIView):
 class KirimChiqimfarqi(APIView):
     serializer_class = Money_monthly_serializer
     queryset = UserRegistration.objects.all()
+
+    @swagger_auto_schema(request_body=Money_monthly_serializer)
 
     def post(self, request):
         username = request.data.get('username')
@@ -87,6 +93,8 @@ class Top3(APIView):
     serializer_class = Money_monthly_serializer
     queryset = UserRegistration.objects.all()
 
+
+
     def get(self, request):
         money = MoneyManagment.objects.all().order_by('-narx')[:3]
         serializer_pulcha = Money_monthly_serializer_send(money, many=True)
@@ -96,6 +104,7 @@ class Top3(APIView):
 class TopUsers3(APIView):
     serializer_class = Money_monthly_serializer
     queryset = UserRegistration.objects.all()
+
 
     def get(self, request):
         MINI_DATABASE_DICT = {}
