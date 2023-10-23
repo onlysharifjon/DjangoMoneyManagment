@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Userapp',
     'rest_framework',
+    'corsheaders',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +73,10 @@ CORS_ALLOW_METHODS = [
 
 
 ROOT_URLCONF = 'Core.urls'
+SWAGGER_SETTINGS = {
+    "DEFAULT_GENERATOR_CLASS": "drf_yasg.generators.OpenAPISchemaGenerator",
+    # Other Swagger settings...
+}
 
 TEMPLATES = [
     {
