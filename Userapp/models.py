@@ -12,7 +12,7 @@ class UserRegistration(models.Model):
 
     def __str__(self):
         return self.username
-
+#salom
 
 class MoneyManagment(models.Model):
     user = models.ForeignKey(UserRegistration, on_delete=models.CASCADE)
